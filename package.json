@@ -1,0 +1,26 @@
+{
+  "name": "ROOF.js",
+  "version": "0.0.1",
+  "private": true,
+  "author": "semu <code@semu.mp>",
+  "contributors": [ 
+    {
+      "name": "semu",
+      "email": "mail@semu.mp"
+    } 
+  ],
+  "scripts": {
+    "start": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/semu/ROOF.js.git"
+  },
+  "dependencies": {
+    "express": "3.0.6",
+    "jade": "*",
+    "bootstrap": "git+https://github.com/twitter/bootstrap.git#v2.3.2",
+    "less-middleware": "*"
+  },
+  "license": "MIT"
+}
