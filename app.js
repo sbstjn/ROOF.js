@@ -4,25 +4,44 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , less = require('less-middleware')
+  , SessionSockets = require('session.socket.io')
+  , MongoStore = require('connect-mongo')(express)
+  , io = require('socket.io')
+  , useragent = require('express-useragent')
   , bsPath = path.join(__dirname, 'node_modules', 'bootstrap');
 
-var app = express();
+// Init Express.js
+var app = express()
+  , cookieParser = express.cookieParser('cookiesecret1234')
+  , sessionStore = new MongoStore({url: "mongodb://localhost:27017/roof/session"});
+  
+// Bind Socket.IO to Express.js session
+var srv = http.createServer(app)
+  , io = io.listen(srv)
+  , sck = new SessionSockets(io, sessionStore, cookieParser)
 
+// Configure Express.js
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
   app.use(express.logger('dev'));
+  
+  // Configure MongoDB/Cookie sessions
+  app.use(cookieParser);
+  app.use(express.session({
+    store: sessionStore
+  }));
+
+  app.use(useragent.express());
   app.use(express.bodyParser());
   app.use(express.methodOverride());  
   
-  // Twitter Bootstrap 
+  // LESS & Twitter Bootstrap 
   app.use('/img', express['static'](path.join(bsPath, 'img')));
   app.use(less({
     src    : path.join(__dirname, 'assets', 'less'),
@@ -32,22 +51,46 @@ app.configure(function(){
     compress: true
   }));
   
+  // Static files in public/
+  app.use(express.static(path.join(__dirname, 'public')));
+  
+  // Global Template settings
+  app.use(function(req, res, next){
+    res.locals.software = 'ROOF.js';
+    res.locals.version = '0.0.1';
+    next();
+  });
   
   // App Routes
   app.use(app.router);
-  
-  // Static files in public/
-  app.use(express.static(path.join(__dirname, 'public')));
-
 });
 
+// Development settings
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.get('/', routes.index);
-app.get('/users', user.list);
+// Web Routes
+app.get('/get', function(req, res) {
+  res.end(JSON.stringify(req.session));
+});
 
-http.createServer(app).listen(app.get('port'), function(){
+app.get('/set', function(req, res) {
+  req.session.user = 'lipsum';
+  
+  res.end('Set session, thanks!');
+});
+
+app.get('/', function(req, res){
+  res.render('index', { title: 'Express' });
+});
+  
+// Socket Routes
+sck.on('connection', function (err, socket, session) {
+
+});
+  
+// Listing
+srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

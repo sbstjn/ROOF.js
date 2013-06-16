@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "author": "semu <code@semu.mp>",
-  "contributors": [ 
+  "contributors": [
     {
       "name": "semu",
       "email": "mail@semu.mp"
-    } 
+    }
   ],
   "scripts": {
     "start": "node app"
@@ -20,7 +20,13 @@
     "express": "3.0.6",
     "jade": "*",
     "bootstrap": "git+https://github.com/twitter/bootstrap.git#v2.3.2",
-    "less-middleware": "*"
+    "less-middleware": "*",
+    "mongoose": "~3.6.11",
+    "express-mongodb": "0.0.3",
+    "connect-mongo": "~0.3.2",
+    "socket.io": "~0.9.16",
+    "session.socket.io": "~0.1.6",
+    "express-useragent": "0.0.7-1"
   },
   "license": "MIT"
 }
