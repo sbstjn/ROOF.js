@@ -2,11 +2,34 @@ doctype 5
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/base.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
+  body
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container
+          button.btn.btn-navbar(type='button', data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='#') Lorem Ipsum
+          .nav-collapse.collapse
+            ul.nav
+              li.active
+                a(href='#') Dolor
+              li
+                a(href='#about') Sit
+              li
+                a(href='#contact') Amet
+    .container
+      block content
+      footer
+        p #{software} #{version}
+    script(src="/javascripts/jquery.js")
+    script(src="/javascripts/bootstrap.min.js")
+    
+    script(src="/javascripts/script.js")
+    
     script(src="/socket.io/socket.io.js")
     script.
       var socket = io.connect('//');
-  body
-    block content
-    footer
-      p #{software} #{version}

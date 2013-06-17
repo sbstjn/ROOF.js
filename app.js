@@ -1,22 +1,21 @@
-
-/**
- * Module dependencies.
- */
-
+// Load Modules
 var express = require('express')
   , http = require('http')
   , path = require('path')
   , less = require('less-middleware')
   , SessionSockets = require('session.socket.io')
   , MongoStore = require('connect-mongo')(express)
-  , io = require('socket.io')
   , useragent = require('express-useragent')
-  , bsPath = path.join(__dirname, 'node_modules', 'bootstrap');
+  , bsPath = path.join(__dirname, 'node_modules', 'bootstrap')
+  , afPath = path.join(__dirname, 'vendor', 'font-awesome')
+  , io = require('socket.io');
 
 // Init Express.js
 var app = express()
   , cookieParser = express.cookieParser('cookiesecret1234')
   , sessionStore = new MongoStore({url: "mongodb://localhost:27017/roof/session"});
+  
+// "font-awesome": "git+https://github.com/FortAwesome/Font-Awesome.git#v3.2.0",
   
 // Bind Socket.IO to Express.js session
 var srv = http.createServer(app)
@@ -41,8 +40,15 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());  
   
-  // LESS & Twitter Bootstrap 
+  // Twitter Bootstrap 
   app.use('/img', express['static'](path.join(bsPath, 'img')));
+  app.use('/javascripts', express['static'](path.join(bsPath, 'docs/assets/js')))
+
+  // Awesome Font
+  app.use('/font', express['static'](path.join(afPath, 'font')));
+  app.use('/stylesheets', express['static'](path.join(afPath, 'css')));
+
+  // Less
   app.use(less({
     src    : path.join(__dirname, 'assets', 'less'),
     paths  : [path.join(bsPath, 'less')],
@@ -70,25 +76,22 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-// Web Routes
-app.get('/get', function(req, res) {
-  res.end(JSON.stringify(req.session));
+// Staging settings
+app.configure('staging', function(){
+
 });
 
-app.get('/set', function(req, res) {
-  req.session.user = 'lipsum';
-  
-  res.end('Set session, thanks!');
+// Production settings
+app.configure('production', function(){
+
 });
 
 app.get('/', function(req, res){
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'ROOF.js' });
 });
   
 // Socket Routes
-sck.on('connection', function (err, socket, session) {
-
-});
+sck.on('connection', function (err, socket, session) {});
   
 // Listing
 srv.listen(app.get('port'), function(){
