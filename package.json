@@ -1,6 +1,8 @@
 {
   "name": "ROOF.js",
   "version": "0.0.1",
+  "description": "ROOF.js",
+  "tags": ["express", "socket", "awesome],
   "private": true,
   "author": "semu <code@semu.mp>",
   "contributors": [
