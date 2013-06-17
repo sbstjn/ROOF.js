@@ -2,6 +2,18 @@
 
 Start with `ENV=development node app.js`
 
+# Install
+
+```bash
+git clone https://github.com/semu/ROOF.js.git
+cd ROOF.js
+npm install
+git submodule init
+git submodule update
+```
+
+Sometimes `git submodule update --init` won't work, it's safer to use the init first and update afterwards.
+
 # Includes	
 
 - Express.JS (MIT License)
