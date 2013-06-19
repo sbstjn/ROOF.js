@@ -14,9 +14,7 @@ var express = require('express')
 var app = express()
   , cookieParser = express.cookieParser('cookiesecret1234')
   , sessionStore = new MongoStore({url: "mongodb://localhost:27017/roof/session"});
-  
-// "font-awesome": "git+https://github.com/FortAwesome/Font-Awesome.git#v3.2.0",
-  
+    
 // Bind Socket.IO to Express.js session
 var srv = http.createServer(app)
   , io = io.listen(srv)
